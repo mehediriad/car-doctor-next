@@ -22,6 +22,7 @@ const taildWindConfig = {
         carDoctorTheme: {
           "primary": "#FF3811",
           "secondary": "#151515",
+          "white":"#FFFFFF",
           "accent": "#37cdbe",
           "neutral": "#3d4451",
           "base-100": "#ffffff",

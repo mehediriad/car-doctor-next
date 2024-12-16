@@ -1,13 +1,12 @@
 import React from 'react';
 import Banner from './Banner';
-import Image from 'next/image';
-import logo from "@/assets/1.jpg"
+import AboutUs from './AboutUs';
 
 const HomePage = () => {
     return (
         <div>
-           
             <Banner/>
+            <AboutUs/>
         </div>
     );
 };
