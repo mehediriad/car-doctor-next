@@ -1,9 +1,12 @@
+"use client"
 import Link from 'next/link';
 import React from 'react';
 import logo from "@/assets/logo.svg"
 import Image from 'next/image';
+import { signOut, useSession } from 'next-auth/react';
 
 const Navbar = () => {
+    const session = useSession()
 
     const links = <>
         <li><Link href="/">Home</Link></li>
@@ -62,7 +65,8 @@ const Navbar = () => {
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </button>
-                    <div className='flex mr-2 hidden'>
+                    {session?.status === "authenticated" &&
+                    <div className='flex mr-2'>
                         <div className="dropdown dropdown-end">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
                                 <div className="indicator">
@@ -96,9 +100,9 @@ const Navbar = () => {
                         <div className="dropdown dropdown-end">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
-                                    <img
+                                    <Image
                                         alt="Tailwind CSS Navbar component"
-                                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                        src={session?.data?.user?.image} width={100} height={100}/>
                                 </div>
                             </div>
                             <ul
@@ -107,18 +111,23 @@ const Navbar = () => {
                                 <li>
                                     <a className="justify-between">
                                         Profile
-                                        <span className="badge">New</span>
+                                        <span className="badge">{session?.data?.user?.name}</span>
                                     </a>
                                 </li>
                                 <li><a>Settings</a></li>
-                                <li><a>Logout</a></li>
+                                <li>
+                                    <button onClick={()=> signOut()}>
+                                    Logout
+                                    </button>
+                                </li>
                             </ul>
                         </div>
-                    </div>
+                    </div>}
                     <button className='btn btn-primary btn-outline'>Appointment</button>
+                    {session?.status === "unauthenticated" &&
                     <Link href={`/login`}>
                     <button className='btn btn-primary ml-4'>Login</button>
-                    </Link>
+                    </Link>}
                 </div>
             </div>
         </div>

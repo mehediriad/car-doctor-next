@@ -1,26 +1,41 @@
 "use client"
 import React, { useState } from 'react';
+import { signIn } from 'next-auth/react';
 import loginImg from "@/assets/images/login/login.svg"
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import SocialLogin from '@/components/shared/SocialLogin';
+import { useRouter } from 'next/navigation';
+
 
 const Login = () => {
     const [show, setShow] = useState(false);
+    const router = useRouter()
     // const { logInUser } = useContext(AuthContext)
     // const navigate = useNavigate()
     // const location = useLocation()
-    // console.log(location);
 
 
-    // const handleLogin = (e) => {
-    //     e.preventDefault()
-    // const email = e.target.email.value;
-    // const password = e.target.password.value;
+
+
+    const handleLogin =async (e) => {
+        e.preventDefault()
+    const email = e.target.email.value;
+    const password = e.target.password.value;
 
     // console.log(email, password);
 
+    const res = await signIn('credentials',{
+        email,
+        password,
+        redirect:false
+    })
+
+   if(res?.status ===200){
+        router.push("/")
+   }
+    
 
     // logInUser(email, password)
     //     .then((userCredential) => {
@@ -68,7 +83,7 @@ const Login = () => {
 
 
     //         });
-    // }
+    }
     return (
         <div className="pb-20 bg-base-100">
 
@@ -81,7 +96,7 @@ const Login = () => {
                     <div className="text-black card w-full max-w-sm shrink-0 shadow-2xl p-4 ">
                         <div className="card-body">
                             <h1 className="text-2xl font-bold text-black">Login</h1>
-                            <form>
+                            <form onSubmit={handleLogin}>
 
                                 <div className="form-control ">
                                     <label className="label">
