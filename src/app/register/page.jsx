@@ -5,10 +5,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import SocialLogin from '@/components/shared/SocialLogin';
+import Swal from 'sweetalert2';
 
 const Register = () => {
     const [show, setShow] = useState(false);
-    // const [error, setError] = useState("")
+    const [error, setError] = useState("")
     const [passwordError, setPasswordError] = useState(false)
     const [confirmPasswordError, setConfirmPasswordError] = useState(false)
     const [TremsError, setTremsError] = useState(false)
@@ -16,86 +17,118 @@ const Register = () => {
 
     // const { createUser, updateUserProfile } = useContext(AuthContext)
 
-    // const handleSignUp = (e) => {
-    //     e.preventDefault()
+    const handleSignUp = async (e) => {
+        e.preventDefault()
 
-    //     setPasswordError(false)
-    //     setConfirmPasswordError(false)
-    //     setTremsError(false)
+        setPasswordError(false)
+        setConfirmPasswordError(false)
+        setTremsError(false)
 
-    //     setError("")
-
-
-    //     const name = e.target.name.value;
-    //     const email = e.target.email.value;
-    //     const password = e.target.password.value;
-    //     const confirmPassword = e.target.confirmPassword.value;
-    //     const trems = e.target.trems.checked;
-
-    //     if (password.length < 6) {
-    //         setPasswordError(true)
-
-    //         return setError("Password must be at least 6 characters or longer")
-    //     }
-    //     if (password !== confirmPassword) {
-    //         setConfirmPasswordError(true)
-
-    //         return setError("Password don't match")
-    //     }
-    //     if (!trems) {
-    //         setTremsError(true)
-
-    //         return setError("Confirm Trems & Conditions")
-    //     }
+        setError("")
 
 
-    //     createUser(email, password)
-    //         .then((userCredential) => {
+        const name = e.target.name.value;
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+        const confirmPassword = e.target.confirmPassword.value;
+        const trems = e.target.trems.checked;
 
+        if (password.length < 6) {
+            setPasswordError(true)
 
-    //             const user = userCredential.user;
+            return setError("Password must be at least 6 characters or longer")
+        }
+        if (password !== confirmPassword) {
+            setConfirmPasswordError(true)
 
-    //             if (user) {
-    //                 updateUserProfile(name, "https://i.ibb.co.com/pnkRJw1/user.png")
-    //                     .then(() => {
+            return setError("Password don't match")
+        }
+        if (!trems) {
+            setTremsError(true)
 
-    //                         Swal.fire({
-    //                             title: "Good job!",
-    //                             text: "Your Account has been created!",
-    //                             icon: "success",
-    //                             footer: 'Click Here to <a href="/login" class="text-[#FF3811]">Login</a>'
-    //                         });
-    //                     }).catch((error) => {
+            return setError("Confirm Trems & Conditions")
+        }
 
-    //                         Swal.fire({
-    //                             icon: "error",
-    //                             title: "Oops...",
-    //                             text: "Something went wrong!!",
+        const newUser = {
+            name,
+            email,
+            password,
+            image: "https://i.ibb.co.com/pnkRJw1/user.png"
+        }
 
-    //                         });
-    //                     });
-    //             }
+        const res = await fetch('http://localhost:3000/api/users/create-user', {
+            method: "POST",
+            body: JSON.stringify(newUser),
+        })
+        const data = await res.json()
 
+        if (data?.status === 200) {
+            Swal.fire({
+                title: "Good job!",
+                text: "Your Account has been created!",
+                icon: "success",
+                footer: 'Click Here to <a href="/login" class="text-[#FF3811]">Login</a>'
+            });
+            e.target.reset()
+        }
+        if (data?.status === 304 || data?.status === 500) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: `${data?.message}`,
 
-    //             e.target.reset()
-    //         })
-    //         .catch((error) => {
-
-    //             const errorCode = error.code;
-    //             const errorMessage = error.message;
-
-    //             Swal.fire({
-    //                 icon: "error",
-    //                 title: "Oops...",
-    //                 text: errorMessage,
-
-    //             });
-
-    //         });
+            });
+        }
 
 
 
-    // }
+        // createUser(email, password)
+        //     .then((userCredential) => {
+
+
+        //         const user = userCredential.user;
+
+        //         if (user) {
+        //             updateUserProfile(name, "https://i.ibb.co.com/pnkRJw1/user.png")
+        //                 .then(() => {
+
+        //                     Swal.fire({
+        //                         title: "Good job!",
+        //                         text: "Your Account has been created!",
+        //                         icon: "success",
+        //                         footer: 'Click Here to <a href="/login" class="text-[#FF3811]">Login</a>'
+        //                     });
+        //                 }).catch((error) => {
+
+        //                     Swal.fire({
+        //                         icon: "error",
+        //                         title: "Oops...",
+        //                         text: "Something went wrong!!",
+
+        //                     });
+        //                 });
+        //         }
+
+
+        //         e.target.reset()
+        //     })
+        //     .catch((error) => {
+
+        //         const errorCode = error.code;
+        //         const errorMessage = error.message;
+
+        //         Swal.fire({
+        //             icon: "error",
+        //             title: "Oops...",
+        //             text: errorMessage,
+
+        //         });
+
+        //     });
+
+
+
+    }
 
 
     return (
@@ -110,7 +143,7 @@ const Register = () => {
                     <div className="card w-full max-w-sm shrink-0 shadow-2xl p-4 ">
                         <div className="card-body">
                             <h1 className="text-2xl font-bold">Sign Up</h1>
-                            <form>
+                            <form onSubmit={handleSignUp}>
 
                                 <div className="form-control ">
                                     <label className="label">
