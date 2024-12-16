@@ -116,6 +116,9 @@ const Navbar = () => {
                         </div>
                     </div>
                     <button className='btn btn-primary btn-outline'>Appointment</button>
+                    <Link href={`/login`}>
+                    <button className='btn btn-primary ml-4'>Login</button>
+                    </Link>
                 </div>
             </div>
         </div>
