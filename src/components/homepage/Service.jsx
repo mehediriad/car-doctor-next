@@ -1,9 +1,10 @@
 import React from 'react';
 import SectionTitle from '../shared/SectionTitle';
-import { services } from '@/lib/services';
 import ServiceCard from './ServiceCard';
+import { getServices } from '@/lib/getServices';
 
-const Service = () => {
+const Service = async () => {
+    const services = await getServices()
     
     
     return (
