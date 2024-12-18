@@ -52,7 +52,7 @@ const CheckOut = ({ params }) => {
             serviceId : service._id
         }
 
-        const res = await fetch("http://localhost:3000/api/booking/create-new",{
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/booking/create-new`,{
             method:"POST",
             headers:{
                 "content-type":"application/json"
@@ -61,7 +61,7 @@ const CheckOut = ({ params }) => {
         })
         const resData = await res.json()
 
-        console.log(resData);
+        
         
         
     }

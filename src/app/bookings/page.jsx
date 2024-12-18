@@ -12,7 +12,7 @@ const Bookings = () => {
 
 
     const loadData = async () =>{
-        const res  = await fetch(`http://localhost:3000/api/booking/get-booking/${session?.data?.user?.email}`)
+        const res  = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/booking/get-booking/${session?.data?.user?.email}`)
         const bookingData = await res.json()
         setBookings(bookingData?.data)
     }
@@ -36,7 +36,7 @@ const Bookings = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
 
-                const res = await fetch(`http://localhost:3000/api/booking/delete-booking/${id}`,{
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/booking/delete-booking/${id}`,{
                     method:"DELETE"
                 })
                 const deleteData = await res.json()

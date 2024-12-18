@@ -1,7 +1,5 @@
 "use client"
 import PageBanner from '@/components/shared/PageBanner';
-import { getServiceDetails } from '@/lib/getServices';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 import React, { use, useEffect, useRef, useState } from 'react';
@@ -22,7 +20,7 @@ const UpdateBooking = ({ params }) => {
 
 
     const loadData = async () => {
-        const res = await fetch(`http://localhost:3000/api/booking/update/${id}`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/booking/update/${id}`)
         const bookingData = await res.json()
 
         setBooking(bookingData.data)
@@ -50,7 +48,7 @@ const UpdateBooking = ({ params }) => {
         // console.log(updateData);
         
 
-        const res = await fetch(`http://localhost:3000/api/booking/update/${id}`,{
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/booking/update/${id}`,{
             method:"PATCH",
             headers:{
                 "content-type":"application/json"

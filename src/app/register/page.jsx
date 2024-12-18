@@ -56,7 +56,7 @@ const Register = () => {
             image: "https://i.ibb.co.com/pnkRJw1/user.png"
         }
 
-        const res = await fetch('http://localhost:3000/api/users/create-user', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/create-user`, {
             method: "POST",
             body: JSON.stringify(newUser),
         })

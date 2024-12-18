@@ -1,13 +1,14 @@
 import connectDB from "@/lib/connectDB"
+import { NextRequest } from "next/server";
 
 export const GET = async () => {
     const db = await connectDB()
     const serviceCollection = db.collection("services");
     try {
         const services = await serviceCollection.find().toArray();
-        return Response.json(services)
+        return NextRequest.json(services)
     } catch (error) {
-        console.log(error);
+        return NextRequest.json(error)
         
     }
 }
