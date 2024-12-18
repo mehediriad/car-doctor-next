@@ -1,6 +1,7 @@
 import { IoIosCloseCircle } from "react-icons/io";
 import React from 'react';
 import Image from "next/image";
+import Link from "next/link";
 
 const BookingRow = ({ booking, handleUpdate,handleBookingDelete }) => {
     const { _id, img, title, price, date, email, status } = booking;
@@ -32,45 +33,9 @@ const BookingRow = ({ booking, handleUpdate,handleBookingDelete }) => {
             <td>{email}</td>
             <td>{date}</td>
             <th>
-                <div>
-                    <form className="flex" onSubmit={(e) => handleUpdate(e, _id)}>
-
-                        {
-                            status == "pending" &&
-                            <select name="status" className="select select-sm rounded-r-none select-warning max-w-xs bg-white border-[#FF3811]">
-                                <option disabled >select</option>
-                                <option value="pending" selected>Pending</option>
-                                <option value="approved">Approved</option>
-                                <option value="cancel">Cancel</option>
-
-                            </select>
-                        }
-                        {
-                            status == "approved" &&
-                            <select name="status" className="select select-sm rounded-r-none select-warning max-w-xs bg-white border-[#FF3811]">
-                                <option disabled>select</option>
-                                <option value="pending" >Pending</option>
-                                <option value="approved" selected>Approved</option>
-                                <option value="cancel">Cancel</option>
-
-                            </select>
-                        }
-                        {
-                            status == "cancel" &&
-                            <select name="status" className="select select-sm rounded-r-none select-warning max-w-xs bg-white border-[#FF3811]">
-                                <option disabled >select</option>
-                                <option value="pending" >Pending</option>
-                                <option value="approved" selected>Approved</option>
-                                <option value="cancel" selected>Cancel</option>
-
-                            </select>
-                        }
-
-
-
-                        <button type="submit" className="btn btn-sm bg-[#FF3811] text-white rounded-l-none">Update</button>
-                    </form>
-                </div>
+                <Link href={`/bookings/update/${_id}`}>
+                <button type="submit" className="btn btn-sm bg-[#FF3811] text-white rounded-l-none">Update</button>
+                </Link>
             </th>
         </tr>
     );
