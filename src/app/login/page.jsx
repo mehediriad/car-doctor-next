@@ -6,12 +6,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import SocialLogin from '@/components/shared/SocialLogin';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 
 const Login = () => {
     const [show, setShow] = useState(false);
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const path = searchParams.get('redirect')
     // const { logInUser } = useContext(AuthContext)
     // const navigate = useNavigate()
     // const location = useLocation()
@@ -29,12 +31,13 @@ const Login = () => {
     const res = await signIn('credentials',{
         email,
         password,
-        redirect:false
+        redirect:true,
+        callbackUrl: path ? path : "/"
     })
 
-   if(res?.status ===200){
-        router.push("/")
-   }
+//    if(res?.status ===200){
+//         router.push("/")
+//    }
     
 
     // logInUser(email, password)
