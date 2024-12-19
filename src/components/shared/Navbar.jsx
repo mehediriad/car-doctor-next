@@ -1,12 +1,31 @@
 "use client"
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from "@/assets/logo.svg"
 import Image from 'next/image';
 import { signOut, useSession } from 'next-auth/react';
 
 const Navbar = () => {
+    const [bookings, setBookings] = useState([])
+    const [total, setTotal] = useState(0);
     const session = useSession()
+
+
+
+    const loadData = async () => {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/booking/get-booking/${session?.data?.user?.email}`)
+        const bookingData = await res.json()
+        setBookings(bookingData?.data)
+    }
+
+    useEffect(() => {
+        loadData()
+        const totalPrice = bookings.reduce((accumulator, currentProduct) => {
+            return accumulator + parseInt(currentProduct.price);
+        }, 0);
+
+        setTotal(totalPrice)
+    }, [session, bookings])
 
     const links = <>
         <li><Link href="/">Home</Link></li>
@@ -67,68 +86,83 @@ const Navbar = () => {
                         </svg>
                     </button>
                     {session?.status === "authenticated" &&
-                    <div className='flex mr-2'>
-                        <div className="dropdown dropdown-end">
-                            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-                                <div className="indicator">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="h-5 w-5"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                    </svg>
-                                    <span className="badge badge-sm indicator-item">8</span>
+                        <div className='flex mr-2'>
+                            <div className="dropdown dropdown-end">
+                                <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+                                    <div className="indicator">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-5 w-5"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
+                                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                        <span className="badge badge-sm indicator-item">{bookings.length}</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div
-                                tabIndex={0}
-                                className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow">
-                                <div className="card-body">
-                                    <span className="text-lg font-bold">8 Items</span>
-                                    <span className="text-info">Subtotal: $999</span>
-                                    <div className="card-actions">
-                                        <button className="btn btn-primary btn-block">View cart</button>
+                                <div
+                                    tabIndex={0}
+                                    className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow">
+                                    <div className="card-body">
+                                        <span className="text-lg font-bold">{bookings.length} Items</span>
+                                        <span className="text-info">Subtotal: ${total}</span>
+                                        <div className="card-actions">
+                                            <Link href={`/bookings`}>
+                                                <button className="btn btn-primary btn-block">View cart</button>
+                                            </Link>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="dropdown dropdown-end">
-                            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                                <div className="w-10 rounded-full">
-                                    <Image
-                                        alt="Tailwind CSS Navbar component"
-                                        src={session?.data?.user?.image} width={100} height={100}/>
+                            <div className="dropdown dropdown-end">
+                                <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                                    <div className="w-10 rounded-full">
+                                        <Image
+                                            alt="Tailwind CSS Navbar component"
+                                            src={session?.data?.user?.image} width={100} height={100} />
+                                    </div>
                                 </div>
+                                <ul
+                                    tabIndex={0}
+                                    className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                                    <li>
+                                        <a className="justify-between">
+                                            Profile
+                                            <span className="badge">{session?.data?.user?.name}</span>
+                                        </a>
+                                    </li>
+                                    <li><a>Settings</a></li>
+                                    <li>
+                                        <button onClick={() => signOut()}>
+                                            Logout
+                                        </button>
+                                    </li>
+                                </ul>
                             </div>
-                            <ul
-                                tabIndex={0}
-                                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                                <li>
-                                    <a className="justify-between">
-                                        Profile
-                                        <span className="badge">{session?.data?.user?.name}</span>
-                                    </a>
-                                </li>
-                                <li><a>Settings</a></li>
-                                <li>
-                                    <button onClick={()=> signOut()}>
-                                    Logout
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>}
-                    <button className='btn btn-primary btn-outline'>Appointment</button>
+                        </div>}
+                    {session?.status !== "loading" &&
+                        <button className='btn btn-primary btn-outline'>Appointment</button>
+                    }
+                    {session?.status === 'loading' &&
+                        <span className="ml-4 loading loading-bars loading-sm"></span>
+                    }
                     {session?.status === "unauthenticated" &&
-                    <Link href={`/login`}>
-                    <button className='btn btn-primary ml-4'>Login</button>
-                    </Link>}
+
+                        <Link href={`/login`}>
+
+
+                            <button className='btn btn-primary ml-4'>Login</button>
+
+
+                        </Link>
+
+                    }
                 </div>
             </div>
         </div>
