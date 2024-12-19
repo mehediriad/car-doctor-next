@@ -1,6 +1,6 @@
 import connectDB from "@/lib/connectDB"
 import { ObjectId } from "mongodb";
-import { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 export const GET = async(request , {params}) =>{
     const db = await connectDB();
@@ -9,9 +9,9 @@ export const GET = async(request , {params}) =>{
     try {
         const result = await bookingCollection.findOne({_id: new ObjectId(params.id)})
 
-        return NextRequest.json({message:"booking data get successfull",status:200,data:result})
+        return NextResponse.json({message:"booking data get successfull",status:200,data:result})
     } catch (error) {
-        return NextRequest.json({message:"something went wrong",status:400,data:error})
+        return NextResponse.json({message:"something went wrong",status:400,data:error})
     }
 }
 export const PATCH = async(request , {params}) =>{
@@ -26,8 +26,8 @@ export const PATCH = async(request , {params}) =>{
             {upsert: true}
         )
 
-        return NextRequest.json({message:"booking data update successfull",status:200,data:result})
+        return NextResponse.json({message:"booking data update successfull",status:200,data:result})
     } catch (error) {
-        return NextRequest.json({message:"something went wrong",status:400,data:error})
+        return NextResponse.json({message:"something went wrong",status:400,data:error})
     }
 }
