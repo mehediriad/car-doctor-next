@@ -2,13 +2,16 @@
 import PageBanner from '@/components/shared/PageBanner';
 import { getServiceDetails } from '@/lib/getServices';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import React, { use, useEffect, useRef, useState } from 'react';
+import Swal from 'sweetalert2';
 
 const CheckOut = ({ params }) => {
     const [service, setService] = useState({})
     const session = useSession();
     const messageRef = useRef();
     const { data } = session;
+    const router = useRouter()
 
     // Unwrap the `params` Promise using `use()`
     const unwrappedParams = use(params);
@@ -61,6 +64,17 @@ const CheckOut = ({ params }) => {
         })
         const resData = await res.json()
 
+        if(resData.status ===  200){
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Your Booking has been added",
+                showConfirmButton: false,
+                timer: 1500
+              });
+              e.target.reset()
+              router.push("/bookings")
+        }
         
         
         
