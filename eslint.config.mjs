@@ -9,16 +9,7 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-// const eslintConfig = [...compat.extends("next/core-web-vitals")];
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals"), // Extend Next.js recommended ESLint rules
-  {
-    files: ["**/*.js"], // Target JavaScript files
-    rules: {
-      semi: ["error", "always"], // Example rule: enforce semicolons
-      "no-unused-vars": ["warn"], // Example rule: warn on unused variables
-    },
-  },
-];
+const eslintConfig = [...compat.extends("next/core-web-vitals")];
+
 
 export default eslintConfig;
