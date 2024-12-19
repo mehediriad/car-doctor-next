@@ -9,6 +9,8 @@ import { FaFileContract } from "react-icons/fa6";
 const ServiceDetails = async ({ params }) => {
     const service = await getServiceDetails(params.id)
     const services = await getServices()
+    
+    
 
     return (
         <div className='bg-base-100 text-black'>
@@ -26,7 +28,7 @@ const ServiceDetails = async ({ params }) => {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 py-6 gap-8">
-                            {service.facility.map((singleFacility, idx) => <div key={idx}
+                            {service?.facility.map((singleFacility, idx) => <div key={idx}
                                 className="bg-[#F3F3F3] rounded-lg border-t-2 border-[#FF3811] p-10"
                             >
                                 <h3 className="text-lg font-bold">{singleFacility.name}</h3>
@@ -52,7 +54,7 @@ const ServiceDetails = async ({ params }) => {
                             } */}
                                 <ul className="menu menu-vertical px-1">
                                     {
-                                        services.map(service => (
+                                       services.length && services.map(service => (
 
                                             <li key={service._id}> <Link href={`/services/${service._id}`} className="flex justify-between items-center">{service.title}<button className="text-[#FF3811]"><FaArrowRight /></button></Link> </li>
 
