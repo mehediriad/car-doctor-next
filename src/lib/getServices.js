@@ -1,6 +1,6 @@
 
 export const getServices = async () => {
-    console.log("baseurl",process.env.NEXT_PUBLIC_BASE_URL);
+    console.log("nextBaseurl",process.env.NEXT_PUBLIC_BASE_URL);
     
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/services/get-all`)
